@@ -6,7 +6,7 @@
 
 Dự án đang trong trạng thái hoạt động nhưng chưa hoàn thiện. Nó đang được phát triển như một phiên bản C++ tối ưu hơn của phiên bản Python gốc. Các mục tiêu chính là:
 
-1. Học C++ thông qua việc thực hiện thực tế
+1. Học C++ thông qua ứng dụng thực tế
 2. Tạo ra phiên bản hiệu quả hơn của mã Python gốc
 3. Duy trì cùng chức năng trong khi tận dụng các ưu điểm của C++
 
