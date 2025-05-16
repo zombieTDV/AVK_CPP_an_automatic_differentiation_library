@@ -269,8 +269,6 @@ public:
         output->backwardFn = [output, this, otherTensor] () {
             this->grad += otherTensor->data * output->grad;
             otherTensor->grad += this->data * output->grad;
-            // this->grad += output->grad * otherTensor->data.shuffle(Eigen::array<int, 2>{{1, 0}});
-            // otherTensor->grad += this->data.shuffle(Eigen::array<int, 2>{{1, 0}}) * output->grad;
         };
 
         return output;
