@@ -24,7 +24,7 @@ int main() {
     //   - contract A's 2nd axis (index 1) with B's 1st axis (index 0)
     Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
         Eigen::IndexPair<int>(1, 0)
-    };  // 2D contraction → matrix product :contentReference[oaicite:0]{index=0}
+    };  // 2D contraction → matrix product 
 
     // Perform the contraction: resulting tensor is rank 2 (2+2−2*1 = 2)
     Eigen::Tensor<float, 2> C = A.contract(B, contract_dims);
@@ -38,7 +38,7 @@ int main() {
 
     Eigen::array<Eigen::IndexPair<int>, 1> contract_dims_grad = {
         Eigen::IndexPair<int>(1, 1)
-    };  // 2D contraction → matrix product :contentReference[oaicite:0]{index=0}
+    };  // 2D contraction → matrix product
 
     // Perform the contraction: resulting tensor is rank 2 (2+2−2*1 = 2)
     Eigen::Tensor<float, 2> dA = dC.contract(B, contract_dims_grad);
