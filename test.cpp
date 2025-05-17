@@ -63,5 +63,7 @@ int main() {
     std::cout << "dB(1,0) = " << dB(1,0) << "\n";  // = 2*1 + 4*1 = 6
     std::cout << "dB(1,1) = " << dB(1,1) << "\n";  // = 2*1 + 4*1 = 6
 
+
+    std::cout << "First index: " << contract_dims[0].first << ", Second index: " << contract_dims[0].second;
     return 0;
 }

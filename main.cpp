@@ -1,8 +1,8 @@
-#include "Eigen/Dense"
+// #include "Eigen/Dense"
 #include "unsupported/Eigen/CXX11/Tensor"
 #include <iostream>
-#include <variant>
-#include <memory>
+// #include <variant>
+// #include <memory>
 
 using std::vector;
 using std::string;
@@ -15,6 +15,7 @@ using Float1D = std::initializer_list<float>;
 using Float2D = std::initializer_list<std::initializer_list<float>>;
 using Float3D = std::initializer_list<std::initializer_list<std::initializer_list<float>>>;
 
+using Pair1D = Eigen::array<Eigen::IndexPair<int>, 1>;
 
 class TensorBase{
 public:
@@ -210,6 +211,7 @@ public:
     }
 };
 
+//------------------------------------------------------------
 
 class Tensor2D : public TensorBase{
 public:
@@ -219,10 +221,7 @@ public:
     Tensor2D(Float2D values, string operation = "", string name = "", bool parameter = false) :
         TensorBase(operation, name, parameter){
             this->cols = values.begin()->size();
-            this->rows = 0;
-            for (auto it = values.begin(); it != values.end(); ++it){
-                this->rows += 1;
-            }
+            this->rows = values.size();
 
             this->data = Eigen::Tensor<float, 2> (this->rows, this->cols).setValues(values);
             this->grad = Eigen::Tensor<float, 2> (this->rows, this->cols).setZero();
@@ -274,6 +273,136 @@ public:
         return output;
     }
 
+    Tensor2D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims){
+        Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {Eigen::IndexPair<int>(first_contract_dims, second_contract_dims)};
+
+        Tensor2D* otherTensor = dynamic_cast<Tensor2D*>(other);
+        Tensor2D* output = new Tensor2D((this->data.contract(otherTensor->data, contract_dims)), "contract");
+
+        output->children = {this, otherTensor};
+    
+        output->backwardFn = [output, this, otherTensor, first_contract_dims, second_contract_dims] () {
+            Eigen::array<Eigen::IndexPair<int>, 1> dims1{Eigen::IndexPair<int>(first_contract_dims,first_contract_dims)};
+            Eigen::array<Eigen::IndexPair<int>, 1> dims2{Eigen::IndexPair<int>(second_contract_dims, second_contract_dims)};
+
+            this->grad += output->grad.contract(otherTensor->data, dims1);
+            otherTensor->grad += this->data.contract(output->grad, dims2);
+        };
+
+        return output;
+    }
+
+    Tensor2D* dot(TensorBase* other){
+        Tensor2D* output = this->contract(other, 1, 0);
+
+        output->setName("dot");
+
+        return output;
+    }
+
+
+    void printInfo() override{
+        cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
+    }
+
+
+};
+
+//------------------------------------------------------------
+
+class Tensor3D : public TensorBase{
+public:
+    Eigen::Tensor<float, 3> data, grad;
+    int batch, rows, cols;
+
+    Tensor3D(Float3D values, string operation = "", string name = "", bool parameter = false) :
+        TensorBase(operation, name, parameter){
+            this->batch = values.size();
+            this->rows = values.begin()->size();
+            this->cols = values.begin()->begin()->size();
+
+            this->data = Eigen::Tensor<float, 3>(this->batch, this->rows, this->cols).setValues(values);
+            this->grad = Eigen::Tensor<float, 3>(this->batch, this->rows, this->cols).setZero();
+        }
+
+    Tensor3D(Eigen::Tensor<float, 3> tensor, string operation = "", string name = "", bool parameter = false) :
+        TensorBase(operation, name, parameter),
+        data(tensor), 
+        grad(Eigen::Tensor<float, 3> (tensor).setZero()){
+            this->batch = this->data.dimension(0);
+            this->rows = this->data.dimension(1);
+            this->cols = this->data.dimension(2);
+        }   
+
+    void backward() override{
+        vector<TensorBase*> visited;
+        buildTopo(this->topo, visited);
+
+        this->grad.setConstant(1);
+
+        for (auto it = topo.rbegin(); it != topo.rend(); ++it){
+            (*it)->backwardFn();
+    }}
+
+    Tensor3D* operator+(TensorBase* other){
+        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
+        Tensor3D* output = new Tensor3D((this->data + otherTensor->data), "+");
+
+        output->children = {this, otherTensor};
+
+        output->backwardFn = [output, this, otherTensor] () {
+            this->grad += output->grad;
+            otherTensor->grad += output->grad;
+        };
+
+        return output;
+    }
+
+    Tensor3D* operator*(TensorBase* other){
+        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
+        Tensor3D* output = new Tensor3D((this->data * otherTensor->data), "*");
+
+        output->children = {this, otherTensor};
+    
+        output->backwardFn = [output, this, otherTensor] () {
+            this->grad += otherTensor->data * output->grad;
+            otherTensor->grad += this->data * output->grad;
+        };
+
+        return output;
+    }
+
+    Tensor3D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims){
+        Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {Eigen::IndexPair<int>(first_contract_dims, second_contract_dims)};
+
+        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
+        Tensor3D* output = new Tensor3D((this->data.contract(otherTensor->data, contract_dims)), "contract");
+
+        output->children = {this, otherTensor};
+    
+        output->backwardFn = [output, this, otherTensor, first_contract_dims, second_contract_dims] () {
+            Eigen::array<Eigen::IndexPair<int>, 1> dims1{Eigen::IndexPair<int>(first_contract_dims,first_contract_dims)};
+            Eigen::array<Eigen::IndexPair<int>, 1> dims2{Eigen::IndexPair<int>(second_contract_dims, second_contract_dims)};
+
+            this->grad += output->grad.contract(otherTensor->data, dims1);
+            otherTensor->grad += this->data.contract(output->grad, dims2);
+        };
+
+        return output;
+    }
+
+    Tensor3D* dot(TensorBase* other){
+        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
+        if (!otherTensor) {
+            cout << "Invalid type for dot operation";
+            return nullptr;
+        }
+        if (this->batch != otherTensor->batch){
+            cout << "Batch dimension not matching in order to perform dot.";
+        }
+        return this->contract(otherTensor, 2, 1);
+    }
+
 
     void printInfo() override{
         cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
@@ -293,6 +422,9 @@ public:
 
 class OptimizationFunc{
 public:
+
+    OptimizationFunc() {};
+
     void gradientDescent(vector<TensorBase*> topo, float learning_rate){
         for (auto it = topo.rbegin(); it != topo.rend(); ++it){
             Tensor0D* new_it = dynamic_cast<Tensor0D*>(*it);
@@ -348,20 +480,53 @@ int main(){
 
     // C1->deleteTopo();
 
-    //-------------------------------------- Tensor2D testing ground
-    Tensor2D* A2 = new Tensor2D({{3, 5}, {4, 6}}, "", "A2");
-    Tensor2D* B2 = new Tensor2D({{6, 9}, {7, 10}}, "", "B2");
+    // //-------------------------------------- Tensor2D testing ground
+    // Tensor2D* A2 = new Tensor2D({{1, 2}, 
+    //                             {3, 4}}, "", "A2");
+    // Tensor2D* B2 = new Tensor2D({{5, 6, 7}, 
+    //                                 {8, 9, 10}}, "", "B2");
 
-    Tensor2D* C2 = *A2 * B2;
-    // C1->setName("C1");
+    // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
+    //     Eigen::IndexPair<int>(1, 0)
+    // };
 
-    C2->backward();
+    // Tensor2D* C2 = A2->dot(B2);
+    // // C1->setName("C1");
 
-    A2->printInfo();
-    B2->printInfo();
-    C2->printInfo();
+    // C2->backward();
 
-    // C2->deleteTopo();
+    // A2->printInfo();
+    // B2->printInfo();
+    // C2->printInfo();
+
+    // // C2->deleteTopo();
+
+    //-------------------------------------- Tensor3D testing ground
+    Tensor3D* A3 = new Tensor3D({{
+        {1, 2}, {3, 4}
+    }, {
+        {5, 6}, {7, 8}
+    }}, "", "A3");
+    Tensor3D* B3 = new Tensor3D({{
+        {9, 10}, {11, 12}
+    }, {
+        {13, 14}, {15, 16}
+    }}, "", "B3");
+
+    // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
+    //     Eigen::IndexPair<int>(1, 0)
+    // };
+
+    Tensor3D* C3 = A3->dot(B3);
+    // // C1->setName("C1");
+
+    C3->backward();
+
+    A3->printInfo();
+    B3->printInfo();
+    C3->printInfo();
+
+    // C3->deleteTopo();
 
     return 0;   
 }
