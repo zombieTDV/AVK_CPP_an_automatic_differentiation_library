@@ -15,7 +15,7 @@ using Float1D = std::initializer_list<float>;
 using Float2D = std::initializer_list<std::initializer_list<float>>;
 using Float3D = std::initializer_list<std::initializer_list<std::initializer_list<float>>>;
 
-using Pair1D = Eigen::array<Eigen::IndexPair<int>, 1>;
+// using Pair1D = Eigen::array<Eigen::IndexPair<int>, 1>;
 
 class TensorBase{
 public:
@@ -372,11 +372,11 @@ public:
         return output;
     }
 
-    Tensor3D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims){
+    Tensor2D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims){
         Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {Eigen::IndexPair<int>(first_contract_dims, second_contract_dims)};
 
-        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
-        Tensor3D* output = new Tensor3D((this->data.contract(otherTensor->data, contract_dims)), "contract");
+        Tensor2D* otherTensor = dynamic_cast<Tensor2D*>(other);
+        Tensor2D* output = new Tensor2D((this->data.contract(otherTensor->data, contract_dims)), "contract");
 
         output->children = {this, otherTensor};
     
@@ -391,16 +391,44 @@ public:
         return output;
     }
 
-    Tensor3D* dot(TensorBase* other){
-        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
-        if (!otherTensor) {
-            cout << "Invalid type for dot operation";
-            return nullptr;
+    // template <typename Dim> Tensor2D* chip(int offset){
+    //     Tensor2D* output = new Tensor2D((this->data.chip<Dim>(offset)), "chip");
+
+    //     output->children = {this};
+
+    //     output->backwardFn = [output, this, offset] () {
+    //         this->grad.chip<Dim>(offset) += output->grad;
+    //     };
+
+    //     return output;
+    // }
+
+    Tensor3D* dot(Tensor3D* other){
+        if (this->batch != other->batch){
+            cout << "Batch dimension not matching in order to perform Batch-wise matrix multiplication.";
         }
-        if (this->batch != otherTensor->batch){
-            cout << "Batch dimension not matching in order to perform dot.";
+
+        Tensor3D* output = new Tensor3D(Eigen::Tensor<float, 3>(this->batch, this->rows, other->cols).setZero());
+        for (int i = 0; i < this->data.dimension(0); ++i) {
+            Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {Eigen::IndexPair<int>(1, 0)};
+            output->data.chip<0>(i) = this->data.chip<0>(i).contract(other->data.chip<0>(i), contract_dims);
         }
-        return this->contract(otherTensor, 2, 1);
+
+        output->children = {this, other};
+
+        output->backwardFn = [output, this, other]() {
+            for (int i = 0; i < this->data.dimension(0); ++i) {
+                Eigen::array<Eigen::IndexPair<int>, 1> dims1 = {Eigen::IndexPair<int>(1, 1)};
+                Eigen::array<Eigen::IndexPair<int>, 1> dims2 = {Eigen::IndexPair<int>(0, 0)};
+                
+                // dA = dC * B^T
+                this->grad.chip<0>(i) += output->grad.chip<0>(i).contract(other->data.chip<0>(i), dims1);
+                // dB = A^T * dC
+                other->grad.chip<0>(i) += this->data.chip<0>(i).contract(output->grad.chip<0>(i), dims2);
+            }
+        };
+
+        return output;
     }
 
 
@@ -503,14 +531,18 @@ int main(){
 
     //-------------------------------------- Tensor3D testing ground
     Tensor3D* A3 = new Tensor3D({{
-        {1, 2}, {3, 4}
+        {1, 3}, 
+        {2, 4}
     }, {
-        {5, 6}, {7, 8}
+        {5, 7}, 
+        {6, 8}
     }}, "", "A3");
     Tensor3D* B3 = new Tensor3D({{
-        {9, 10}, {11, 12}
+        {1, 3}, 
+        {2, 4}
     }, {
-        {13, 14}, {15, 16}
+        {5, 7}, 
+        {6, 8}
     }}, "", "B3");
 
     // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
@@ -518,7 +550,7 @@ int main(){
     // };
 
     Tensor3D* C3 = A3->dot(B3);
-    // // C1->setName("C1");
+    C3->setName("C3");
 
     C3->backward();
 
