@@ -136,6 +136,21 @@ public:
         return output;
     }
 
+    Tensor0D* operator-(){
+        Tensor0D* neg_one = new Tensor0D(-1.0f, "neg_one");
+        Tensor0D* output = this->operator*(neg_one);
+        return output;
+    }
+
+    Tensor0D* operator*(Tensor0D* other){
+        Tensor0D* output = new Tensor0D((this->data * other->data), "*");
+        output->children = {this, other};
+        output->backwardFn = [output, this, other] () {
+            this->grad += other->data * output->grad;
+            other->grad += this->data * output->grad;
+        };
+        return output;
+    }
 
     void printInfo() override{
         cout << this->name << ": " << "Data: " << this->data << ", " << " Grad: " << this->grad << '\n';
@@ -184,6 +199,12 @@ public:
         return output;
     }
 
+    Tensor1D* operator-(){
+        Tensor0D* neg_one = new Tensor0D(-1.0f, "neg_one");
+        Tensor1D* output = this->operator*(neg_one);
+        return output;
+    }
+
     Tensor1D* operator*(TensorBase* other){
         Tensor1D* otherTensor = dynamic_cast<Tensor1D*>(other);
         Tensor1D* output = new Tensor1D((this->data * otherTensor->data), "*");
@@ -193,6 +214,22 @@ public:
         output->backwardFn = [output, this, otherTensor] () {
             this->grad += output->grad * otherTensor->data;
             otherTensor->grad += output->grad * this->data;
+        };
+
+        return output;
+    }
+
+    Tensor1D* operator*(Tensor0D* other){
+        // Create a 1D tensor with the same value as the scalar
+        Eigen::Tensor<float, 1> scalar_tensor(this->data.dimensions());
+        scalar_tensor.setConstant(other->data(0));
+        
+        Tensor1D* output = new Tensor1D((this->data * scalar_tensor), "*");
+        output->children = {this, other};
+    
+        output->backwardFn = [output, this, other] () {
+            this->grad += other->data(0) * output->grad;
+            other->grad += (this->data * output->grad).sum();
         };
 
         return output;
@@ -259,6 +296,12 @@ public:
         return output;
     }
 
+    Tensor2D* operator-(){
+        Tensor0D* neg_one = new Tensor0D(-1.0f, "neg_one");
+        Tensor2D* output = this->operator*(neg_one);
+        return output;
+    }
+
     Tensor2D* operator*(TensorBase* other){
         Tensor2D* otherTensor = dynamic_cast<Tensor2D*>(other);
         Tensor2D* output = new Tensor2D((this->data * otherTensor->data), "*");
@@ -268,6 +311,22 @@ public:
         output->backwardFn = [output, this, otherTensor] () {
             this->grad += otherTensor->data * output->grad;
             otherTensor->grad += this->data * output->grad;
+        };
+
+        return output;
+    }
+
+    Tensor2D* operator*(Tensor0D* other){
+        // Create a 2D tensor with the same value as the scalar
+        Eigen::Tensor<float, 2> scalar_tensor(this->data.dimensions());
+        scalar_tensor.setConstant(other->data(0));
+        
+        Tensor2D* output = new Tensor2D((this->data * scalar_tensor), "*");
+        output->children = {this, other};
+    
+        output->backwardFn = [output, this, other] () {
+            this->grad += other->data(0) * output->grad;
+            other->grad += (this->data * output->grad).sum();
         };
 
         return output;
@@ -358,6 +417,17 @@ public:
         return output;
     }
 
+    Tensor3D* operator-(){
+        Tensor0D* neg_one = new Tensor0D(-1.0f, "neg_one");
+        Tensor3D* output = this->operator*(neg_one);
+        return output;
+    }
+
+    Tensor3D* operator-(TensorBase* other){
+        Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
+        return this->operator+(otherTensor->operator-());
+    }
+
     Tensor3D* operator*(TensorBase* other){
         Tensor3D* otherTensor = dynamic_cast<Tensor3D*>(other);
         Tensor3D* output = new Tensor3D((this->data * otherTensor->data), "*");
@@ -367,6 +437,22 @@ public:
         output->backwardFn = [output, this, otherTensor] () {
             this->grad += otherTensor->data * output->grad;
             otherTensor->grad += this->data * output->grad;
+        };
+
+        return output;
+    }
+
+    Tensor3D* operator*(Tensor0D* other){
+        // Create a 3D tensor with the same value as the scalar
+        Eigen::Tensor<float, 3> scalar_tensor(this->data.dimensions());
+        scalar_tensor.setConstant(other->data(0));
+        
+        Tensor3D* output = new Tensor3D((this->data * scalar_tensor), "*");
+        output->children = {this, other};
+    
+        output->backwardFn = [output, this, other] () {
+            this->grad += other->data(0) * output->grad;
+            other->grad += (this->data * output->grad).sum();
         };
 
         return output;
