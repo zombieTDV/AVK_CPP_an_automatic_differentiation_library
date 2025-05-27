@@ -19,7 +19,7 @@ void Tensor1D::backward() {
     this->grad.setConstant(1);
 
     for (auto it = topo.rbegin(); it != topo.rend(); ++it) {
-        (*it)->backwardFn();
+        (*it)->executeBackward();
     }
 }
 
@@ -60,13 +60,13 @@ Tensor1D* Tensor1D::operator*(TensorBase* other) {
 Tensor1D* Tensor1D::operator*(Tensor0D* other) {
     // Create a 1D tensor with the same value as the scalar
     Eigen::Tensor<float, 1> scalar_tensor(this->data.dimensions());
-    scalar_tensor.setConstant(other->data(0));
+    scalar_tensor.setConstant(other->getData()(0));
     
     Tensor1D* output = new Tensor1D((this->data * scalar_tensor), "*");
     output->children = {this, other};
 
     output->backwardFn = [output, this, other] () {
-        this->grad += other->data(0) * output->grad;
+        this->grad += other->getData()(0) * output->grad;
         other->grad += (this->data * output->grad).sum();
     };
 
@@ -82,3 +82,4 @@ Tensor1D* Tensor1D::operator-(TensorBase* other) {
 void Tensor1D::printInfo() {
     cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
 }
+ 

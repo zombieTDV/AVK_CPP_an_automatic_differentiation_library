@@ -18,9 +18,7 @@ using Float3D = std::initializer_list<std::initializer_list<std::initializer_lis
 // using Pair1D = Eigen::array<Eigen::IndexPair<int>, 1>;
 
 class TensorBase{
-public:
-    virtual ~TensorBase() = default;
-
+protected:
     string operation;
     string name;
     bool parameter = false;
@@ -30,14 +28,37 @@ public:
 
     std::function<void()> backwardFn = [](){};
 
-    // Constructor declarations
+public:
     TensorBase(string operation = "", string name = "", bool parameter = false) : operation(operation), name(name), parameter(parameter){}
+    virtual ~TensorBase() = default;
 
-     // Function declarations
+
+    string getOperation() {return operation;}
+    string getName() {return name;}
+    bool isParameter() {return parameter;}
+    vector<TensorBase*> getChildren() {return children;}
+    vector<TensorBase*> getTopo() {return topo;}
+    std::function<void()> getBackwardFn() {return backwardFn;}
+    
+    virtual TensorBase* operator+(TensorBase* other) = 0;
+    virtual TensorBase* operator-(TensorBase* other) = 0;
+    virtual TensorBase* operator-() = 0;
+    virtual TensorBase* operator*(TensorBase* other) = 0;
+    // virtual TensorBase* operator/(TensorBase* other) = 0;
+    // virtual TensorBase* operator^(TensorBase* other) = 0;
+    // virtual TensorBase* operator^(float other) = 0;
+    // virtual TensorBase* operator^(int other) = 0;
+    // virtual TensorBase* operator^(double other) = 0;
+    // virtual TensorBase* operator^(long other) = 0;
+    // virtual TensorBase* operator^(short other) = 0;
+
+    virtual TensorBase* pow(int other) = 0;
+    
     virtual void backward(){}
     virtual void printInfo(){}
     void buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited);
     void deleteTopo();
     void setName(string name);
     void setCleaned(bool parameter);
+    void executeBackward() { backwardFn(); }
 };

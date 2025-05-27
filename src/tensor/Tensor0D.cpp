@@ -21,7 +21,7 @@ void Tensor0D::backward() {
     this->grad.setConstant(1);
 
     for (auto it = topo.rbegin(); it != topo.rend(); ++it) {
-        (*it)->backwardFn();
+        (*it)->executeBackward();
     }
 }
 
