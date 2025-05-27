@@ -1,13 +1,17 @@
 #pragma once //Báo cho trình biên dịch không khai báo lớp này quá 1 lần.
 #include "TensorBase.h"
 
-class Tensor1D;  // Forward declaration
+class Tensor1D;  // Forward declarations
+class Tensor2D;
+class Tensor3D;
 
 class Tensor0D : public TensorBase {
 private:
     Eigen::Tensor<float, 0> data, grad;
 public:
-    friend class Tensor1D;  // Make Tensor1D a friend class
+    friend class Tensor1D;  // Friend declarations
+    friend class Tensor2D;
+    friend class Tensor3D;
     
     // Constructor declarations
     Tensor0D(float data, string operation = "", string name = "", bool parameter = false);

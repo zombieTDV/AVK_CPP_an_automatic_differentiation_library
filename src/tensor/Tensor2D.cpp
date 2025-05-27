@@ -68,7 +68,7 @@ Tensor2D* Tensor2D::operator*(Tensor0D* other) {
     // Create a 2D tensor with the same value as the scalar
     Eigen::Tensor<float, 2> scalar_tensor(this->data.dimensions());
     scalar_tensor.setConstant(other->data(0));
-    
+
     Tensor2D* output = new Tensor2D((this->data * scalar_tensor), "*");
     output->children = {this, other};
 
