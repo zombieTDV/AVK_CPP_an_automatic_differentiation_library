@@ -4,6 +4,7 @@
 class Tensor1D;  // Forward declarations
 class Tensor2D;
 class Tensor3D;
+class OptimizationFunc;
 
 class Tensor0D : public TensorBase {
 private:
@@ -12,6 +13,7 @@ public:
     friend class Tensor1D;  // Friend declarations
     friend class Tensor2D;
     friend class Tensor3D;
+    friend class OptimizationFunc;
     
     // Constructor declarations
     Tensor0D(float data, string operation = "", string name = "", bool parameter = false);

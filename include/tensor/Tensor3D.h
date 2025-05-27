@@ -4,6 +4,7 @@
 #include "Tensor2D.h"
 
 class Tensor1D;  // Forward declarations
+class OptimizationFunc;
 
 class Tensor3D : public TensorBase {
 private:
@@ -13,6 +14,7 @@ public:
     friend class Tensor0D;  // Friend declarations
     friend class Tensor1D;
     friend class Tensor2D;
+    friend class OptimizationFunc;
 
     // Constructor declarations
     Tensor3D(Float3D values, string operation = "", string name = "", bool parameter = false);
@@ -39,6 +41,8 @@ public:
     Tensor3D* operator-(TensorBase* other);
     Tensor3D* operator*(TensorBase* other);
     Tensor3D* operator*(Tensor0D* other);
+    Tensor3D* pow(int other) override;
+
     Tensor2D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims);
     Tensor3D* dot(Tensor3D* other);
     void printInfo() override;

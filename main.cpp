@@ -18,6 +18,11 @@ using std::cout;
 
 class MeanSquaredErrorLoss{
 public:
+    // Friend declarations
+    friend class Tensor0D;
+    friend class Tensor1D;  
+    friend class Tensor2D;
+    friend class Tensor3D;
     Tensor0D* Tensor0D_Loss(Tensor0D* true_y, Tensor0D* predicted_y){
         Tensor0D* loss = (*true_y - predicted_y)->pow(2);
         return loss;
@@ -26,7 +31,11 @@ public:
 
 class OptimizationFunc{
 public:
-
+    // Friend declarations
+    friend class Tensor0D;
+    friend class Tensor1D;  
+    friend class Tensor2D;
+    friend class Tensor3D;
     OptimizationFunc() {};
 
     void gradientDescent(vector<TensorBase*> topo, float learning_rate){

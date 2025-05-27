@@ -1,8 +1,11 @@
 # ninja log v6
-9	2098	7694183705641486	CMakeFiles/program.dir/main.cpp.obj	46742496de4833bf
-20	2145	7694183705769177	CMakeFiles/program.dir/src/tensor/TensorBase.cpp.obj	ccd9c9839cdd3b6e
-31	3099	7694183706013325	CMakeFiles/program.dir/src/tensor/Tensor0D.cpp.obj	178174efb77791d3
-55	3449	7694183706103046	CMakeFiles/program.dir/src/tensor/Tensor1D.cpp.obj	9b59437fa2912340
-66	4704	7694183706212587	CMakeFiles/program.dir/src/tensor/Tensor2D.cpp.obj	bd489946517498c8
-74	6411	7694183706310583	CMakeFiles/program.dir/src/tensor/Tensor3D.cpp.obj	c73e3967880a7d40
-6419	6766	7694183769738118	program.exe	18065ecaeada1653
+15	1560	7700265277590276	CMakeFiles/program.dir/src/tensor/TensorBase.cpp.obj	ccd9c9839cdd3b6e
+5	1642	7700265277460232	CMakeFiles/program.dir/main.cpp.obj	46742496de4833bf
+28	2334	7700265277740343	CMakeFiles/program.dir/src/tensor/Tensor0D.cpp.obj	178174efb77791d3
+44	2674	7700265277930346	CMakeFiles/program.dir/src/tensor/Tensor1D.cpp.obj	9b59437fa2912340
+66	3877	7700265278130293	CMakeFiles/program.dir/src/tensor/Tensor2D.cpp.obj	bd489946517498c8
+85	5562	7700265278375756	CMakeFiles/program.dir/src/tensor/Tensor3D.cpp.obj	c73e3967880a7d40
+52	2946	7700265908990195	CMakeFiles/program.dir/src/tensor/Tensor1D.cpp.obj	9b59437fa2912340
+61	4003	7700265909090097	CMakeFiles/program.dir/src/tensor/Tensor2D.cpp.obj	bd489946517498c8
+71	5690	7700265909200331	CMakeFiles/program.dir/src/tensor/Tensor3D.cpp.obj	c73e3967880a7d40
+5694	5957	7700265965404974	program.exe	18065ecaeada1653

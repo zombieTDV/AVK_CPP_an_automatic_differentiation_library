@@ -28,7 +28,7 @@ void Tensor3D::backward() {
     this->grad.setConstant(1);
 
     for (auto it = topo.rbegin(); it != topo.rend(); ++it) {
-        (*it)->backwardFn();
+        (*it)->executeBackward();
     }
 }
 
@@ -131,6 +131,15 @@ Tensor3D* Tensor3D::dot(Tensor3D* other) {
         }
     };
 
+    return output;
+}
+
+Tensor3D* Tensor3D::pow(int other) {
+    Tensor3D* output = new Tensor3D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
     return output;
 }
 

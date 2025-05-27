@@ -50,6 +50,12 @@ Tensor2D* Tensor2D::operator-() {
     return output;
 }
 
+Tensor2D* Tensor2D::operator-(TensorBase* other) {
+    Tensor2D* neg = new Tensor2D((this->data).setConstant(-1), "Neg");
+    Tensor2D* output = this->operator+(*neg * other);
+    return output;
+}
+
 Tensor2D* Tensor2D::operator*(TensorBase* other) {
     Tensor2D* otherTensor = dynamic_cast<Tensor2D*>(other);
     Tensor2D* output = new Tensor2D((this->data * otherTensor->data), "*");
@@ -102,6 +108,15 @@ Tensor2D* Tensor2D::contract(TensorBase* other, int first_contract_dims, int sec
 Tensor2D* Tensor2D::dot(TensorBase* other) {
     Tensor2D* output = this->contract(other, 1, 0);
     output->setName("dot");
+    return output;
+}
+
+Tensor2D* Tensor2D::pow(int other) {
+    Tensor2D* output = new Tensor2D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
     return output;
 }
 

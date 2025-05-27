@@ -4,6 +4,7 @@
 
 class Tensor2D;  // Forward declarations
 class Tensor3D;
+class OptimizationFunc;
 
 class Tensor1D : public TensorBase {
 private:
@@ -12,6 +13,7 @@ public:
     friend class Tensor0D;  // Friend declarations
     friend class Tensor2D;
     friend class Tensor3D;
+    friend class OptimizationFunc;
 
     // Constructor declarations
     Tensor1D(Float1D values, string operation = "", string name = "", bool parameter = false);
@@ -37,7 +39,7 @@ public:
     // Tensor1D* operator^(double other) override;
     // Tensor1D* operator^(long other) override;
     // Tensor1D* operator^(short other) override;
-    // Tensor1D* pow(int other) override;
+    Tensor1D* pow(int other) override;
 
     void printInfo() override;
 };

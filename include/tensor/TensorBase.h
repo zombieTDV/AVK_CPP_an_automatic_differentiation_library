@@ -17,6 +17,8 @@ using Float3D = std::initializer_list<std::initializer_list<std::initializer_lis
 
 // using Pair1D = Eigen::array<Eigen::IndexPair<int>, 1>;
 
+class OptimizationFunc;  // Forward declaration
+
 class TensorBase{
 protected:
     string operation;
@@ -29,6 +31,8 @@ protected:
     std::function<void()> backwardFn = [](){};
 
 public:
+    friend class OptimizationFunc;  // Make OptimizationFunc a friend
+    
     TensorBase(string operation = "", string name = "", bool parameter = false) : operation(operation), name(name), parameter(parameter){}
     virtual ~TensorBase() = default;
 
