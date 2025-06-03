@@ -120,6 +120,29 @@ Tensor2D* Tensor2D::pow(int other) {
     return output;
 }
 
+Tensor2D* Tensor2D::pow(float other) {
+    Tensor2D* output = new Tensor2D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
+    return output;
+}
+
+Tensor2D* Tensor2D::pow(double other) {
+    Tensor2D* output = new Tensor2D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
+    return output;
+}
+
+Tensor2D* Tensor2D::pow(Tensor0D* other) {
+    Tensor2D* output = this->pow(other->data(0));
+    return output;
+}
+
 void Tensor2D::printInfo() {
     cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
 }

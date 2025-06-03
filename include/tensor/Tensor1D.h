@@ -40,6 +40,9 @@ public:
     // Tensor1D* operator^(long other) override;
     // Tensor1D* operator^(short other) override;
     Tensor1D* pow(int other) override;
+    Tensor1D* pow(double other) override;
+    Tensor1D* pow(float other) override;
+    Tensor1D* pow(Tensor0D* other) override;
 
     void printInfo() override;
 };

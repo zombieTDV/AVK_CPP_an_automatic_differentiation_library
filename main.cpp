@@ -143,7 +143,9 @@ int main(){
     B3->printInfo();
     C3->printInfo();
 
-    // C3->deleteTopo();
 
+    cout << "Count: " << TensorBase::getCount() << '\n';
+    C3->deleteTopo();
+    cout << "Count: " << TensorBase::getCount() << '\n';
     return 0;   
 }

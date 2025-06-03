@@ -32,9 +32,13 @@ public:
     Tensor0D* operator+(TensorBase* other) override;
     Tensor0D* operator*(TensorBase* other) override;
     Tensor0D* operator-(TensorBase* other) override;
+
     Tensor0D* pow(int other) override;
-    Tensor0D* operator-() override;
+    Tensor0D* pow(double other) override;
+    Tensor0D* pow(Tensor0D* other) override;
+    Tensor0D* pow(float other) override;
     
-    Tensor0D* operator*(Tensor0D* other);
+    Tensor0D* operator-() override;
+    Tensor0D* operator*(Tensor0D* other) override;
     void printInfo() override;
 };

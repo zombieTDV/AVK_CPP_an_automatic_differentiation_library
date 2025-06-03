@@ -71,6 +71,31 @@ Tensor0D* Tensor0D::pow(int other) {
     return output;
 }
 
+Tensor0D* Tensor0D::pow(float other) {
+    Tensor0D* output = new Tensor0D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
+    return output;
+}
+Tensor0D* Tensor0D::pow(double other) {
+    Tensor0D* output = new Tensor0D((this->data.pow(other)), "pow");
+
+    output->children = {this};
+
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
+
+    return output;
+}
+
+Tensor0D* Tensor0D::pow(Tensor0D* other) {
+    Tensor0D* output = this->pow(other->data(0));
+    return output;
+}
+
 Tensor0D* Tensor0D::operator-() {
     Tensor0D* neg_one = new Tensor0D(-1.0f, "neg_one");
     Tensor0D* output = this->operator*(neg_one);

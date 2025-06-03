@@ -1,5 +1,7 @@
 #include "../../include/tensor/TensorBase.h"
 
+int TensorBase::count = 0;  
+
 void TensorBase::buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited){
     if (std::find(visited.begin(), visited.end(), this) == visited.end()){
         visited.push_back(this);
@@ -8,6 +10,10 @@ void TensorBase::buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visit
         }
         topo.push_back(this);
     }
+}
+
+TensorBase::~TensorBase(){
+    count--;
 }
 
 void TensorBase::deleteTopo(){

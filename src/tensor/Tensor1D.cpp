@@ -88,6 +88,29 @@ Tensor1D* Tensor1D::pow(int other) {
     return output;
 }
 
+Tensor1D* Tensor1D::pow(float other) {
+    Tensor1D* output = new Tensor1D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
+    return output;
+}
+
+Tensor1D* Tensor1D::pow(double other) {
+    Tensor1D* output = new Tensor1D((this->data.pow(other)), "pow");
+    output->children = {this};
+    output->backwardFn = [output, this, other] () {
+        this->grad += other * (this->data.pow(other - 1)) * output->grad;
+    };
+    return output;
+}
+
+Tensor1D* Tensor1D::pow(Tensor0D* other) {
+    Tensor1D* output = this->pow(other->data(0));
+    return output;
+}
+
 void Tensor1D::printInfo() {
     cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
 }

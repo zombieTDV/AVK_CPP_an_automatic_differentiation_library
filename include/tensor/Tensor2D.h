@@ -33,12 +33,17 @@ public:
     
     // Function declarations
     void backward() override;
-    Tensor2D* operator+(TensorBase* other);
-    Tensor2D* operator-();
-    Tensor2D* operator-(TensorBase* other);
-    Tensor2D* operator*(TensorBase* other);
-    Tensor2D* operator*(Tensor0D* other);
+    Tensor2D* operator+(TensorBase* other) override;
+    Tensor2D* operator-() override;
+    Tensor2D* operator-(TensorBase* other) override;
+    Tensor2D* operator*(TensorBase* other) override;
+    Tensor2D* operator*(Tensor0D* other) override;
+
     Tensor2D* pow(int other) override;
+    Tensor2D* pow(double other) override;
+    Tensor2D* pow(float other) override;
+    Tensor2D* pow(Tensor0D* other) override;
+    
     Tensor2D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims);
     Tensor2D* dot(TensorBase* other);
     void printInfo() override;
