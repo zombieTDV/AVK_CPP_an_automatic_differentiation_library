@@ -21,7 +21,7 @@ class Tensor0D;  // Forward declaration
 class Tensor1D;
 class Tensor2D;
 class Tensor3D;
-class OptimizationFunc;  // Forward declaration
+class OptimizationFunc;
 
 class TensorBase{
 protected:
@@ -34,16 +34,21 @@ protected:
 
     std::function<void()> backwardFn = [](){};
 
-    static int count;
+    static int instanceCount;
+    static int memoryUsage;
 public:
-    friend class OptimizationFunc;  // Make OptimizationFunc a friend
+    friend class OptimizationFunc; 
     
     TensorBase(string operation = "", string name = "", bool parameter = false) : operation(operation), name(name), parameter(parameter){
-        count++;
+        instanceCount++;
+        memoryUsage += sizeof(TensorBase);
     }
+    
     virtual ~TensorBase();
 
-    static int getCount() {return count;}
+    static int getInstanceCount() {return instanceCount;}
+    static void printMemoryUsage() {cout << "Memory Usage: " << memoryUsage << " bytes (" << (float)memoryUsage/(1024*1024) << " MB) for " << instanceCount << " instances" << "\n";}
+
     string getOperation() const {return operation;}
     string getName() const {return name;}
     bool isParameter() const {return parameter;}

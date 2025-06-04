@@ -1,6 +1,7 @@
 #include "../../include/tensor/TensorBase.h"
 
-int TensorBase::count = 0;  
+int TensorBase::instanceCount = 0;  
+int TensorBase::memoryUsage = 0;
 
 void TensorBase::buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited){
     if (std::find(visited.begin(), visited.end(), this) == visited.end()){
@@ -13,7 +14,8 @@ void TensorBase::buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visit
 }
 
 TensorBase::~TensorBase(){
-    count--;
+    instanceCount--;
+    memoryUsage -= sizeof(TensorBase);
 }
 
 void TensorBase::deleteTopo(){
