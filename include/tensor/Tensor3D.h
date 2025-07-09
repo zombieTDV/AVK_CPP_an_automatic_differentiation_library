@@ -17,8 +17,8 @@ public:
     friend class OptimizationFunc;
 
     // Constructor declarations
-    Tensor3D(Float3D values, string operation = "", string name = "", bool parameter = false);
-    Tensor3D(Eigen::Tensor<float, 3> tensor, string operation = "", string name = "", bool parameter = false);
+    Tensor3D(Float3D values, string operation = "", bool parameter = false);
+    Tensor3D(Eigen::Tensor<float, 3> tensor, string operation = "", bool parameter = false);
 
 
     // Getters and setters

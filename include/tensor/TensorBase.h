@@ -26,7 +26,7 @@ class OptimizationFunc;
 class TensorBase{
 protected:
     string operation;
-    string name;
+    // string name;
     bool parameter = false;
 
     vector<TensorBase*> children;
@@ -39,7 +39,7 @@ protected:
 public:
     friend class OptimizationFunc; 
     
-    TensorBase(string operation = "", string name = "", bool parameter = false) : operation(operation), name(name), parameter(parameter){
+    TensorBase(string operation = "", bool parameter = false) : operation(operation), parameter(parameter){
         instanceCount++;
         memoryUsage += sizeof(TensorBase);
     }
@@ -50,7 +50,7 @@ public:
     static void printMemoryUsage() {cout << "Memory Usage: " << memoryUsage << " bytes (" << (float)memoryUsage/(1024*1024) << " MB) for " << instanceCount << " instances" << "\n";}
 
     string getOperation() const {return operation;}
-    string getName() const {return name;}
+    // string getName() const {return name;}
     bool isParameter() const {return parameter;}
     vector<TensorBase*> getChildren() const {return children;}
     vector<TensorBase*> getTopo() const {return topo;}
@@ -71,8 +71,9 @@ public:
     virtual void printInfo() = 0;
     void buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited);
     void deleteTopo();
-    void setName(string name);
+    // void setName(string name);
     void setCleaned(bool parameter);
 
     void executeBackward() { backwardFn(); }
+
 };

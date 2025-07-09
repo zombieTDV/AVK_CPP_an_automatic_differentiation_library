@@ -19,10 +19,10 @@ using std::cout;
 class MeanSquaredErrorLoss{
 public:
     // Friend declarations
-    friend class Tensor0D;
-    friend class Tensor1D;  
-    friend class Tensor2D;
-    friend class Tensor3D;
+    // friend class Tensor0D;
+    // friend class Tensor1D;  
+    // friend class Tensor2D;
+    // friend class Tensor3D;
     Tensor0D* Tensor0D_Loss(Tensor0D* true_y, Tensor0D* predicted_y){
         Tensor0D* loss = (*true_y - predicted_y)->pow(2);
         return loss;
@@ -31,11 +31,11 @@ public:
 
 class OptimizationFunc{
 public:
-    // Friend declarations
-    friend class Tensor0D;
-    friend class Tensor1D;  
-    friend class Tensor2D;
-    friend class Tensor3D;
+    // // Friend declarations
+    // friend class Tensor0D;
+    // friend class Tensor1D;  
+    // friend class Tensor2D;
+    // friend class Tensor3D;
     OptimizationFunc() {};
 
     void gradientDescent(vector<TensorBase*> topo, float learning_rate){
@@ -57,7 +57,6 @@ int main(){
     // for (int i = 0; i < 10; i++){
     //     Tensor0D* Y_hat = new Tensor0D(15, "", "Y-hat");
     //     Tensor0D* C0 = Loss_func.Tensor0D_Loss((*A0 + B0), Y_hat);
-    //     C0->setName("C0");
 
     //     C0->backward();
 
@@ -83,7 +82,6 @@ int main(){
     // Tensor1D* B1 = new Tensor1D({6, 9}, "", "B1");
 
     // Tensor1D* C1 = *A1 * B1;
-    // C1->setName("C1");
 
     // C1->backward();
 
@@ -104,7 +102,6 @@ int main(){
     // };
 
     // Tensor2D* C2 = A2->dot(B2);
-    // // C1->setName("C1");
 
     // C2->backward();
 
@@ -121,21 +118,20 @@ int main(){
     }, {
         {5, 7}, 
         {6, 8}
-    }}, "", "A3");
+    }}, "");
     Tensor3D* B3 = new Tensor3D({{
         {1, 3}, 
         {2, 4}
     }, {
         {5, 7}, 
         {6, 8}
-    }}, "", "B3");
+    }}, "");
 
     // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
     //     Eigen::IndexPair<int>(1, 0)
     // };
 
     Tensor3D* C3 = A3->dot(B3);
-    C3->setName("C3");
 
     C3->backward();
 

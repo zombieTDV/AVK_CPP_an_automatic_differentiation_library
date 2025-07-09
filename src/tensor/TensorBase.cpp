@@ -28,6 +28,6 @@ void TensorBase::deleteTopo(){
     }
 }
 
-void TensorBase::setName(string name) {this->name = name;}
+// void TensorBase::setName(string name) {this->name = name;}
 
 void TensorBase::setCleaned(bool parameter) {this->parameter = parameter;}

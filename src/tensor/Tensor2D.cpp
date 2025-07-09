@@ -1,7 +1,7 @@
 #include "../../include/tensor/Tensor2D.h"
 
-Tensor2D::Tensor2D(Float2D values, string operation, string name, bool parameter) :
-    TensorBase(operation, name, parameter)
+Tensor2D::Tensor2D(Float2D values, string operation, bool parameter) :
+    TensorBase(operation, parameter)
 {
     this->cols = values.begin()->size();
     this->rows = values.size();
@@ -10,8 +10,8 @@ Tensor2D::Tensor2D(Float2D values, string operation, string name, bool parameter
     this->grad = Eigen::Tensor<float, 2>(this->rows, this->cols).setZero();
 }
 
-Tensor2D::Tensor2D(Eigen::Tensor<float, 2> tensor, string operation, string name, bool parameter) :
-    TensorBase(operation, name, parameter),
+Tensor2D::Tensor2D(Eigen::Tensor<float, 2> tensor, string operation, bool parameter) :
+    TensorBase(operation, parameter),
     data(tensor), 
     grad(Eigen::Tensor<float, 2>(tensor).setZero())
 {
@@ -107,7 +107,6 @@ Tensor2D* Tensor2D::contract(TensorBase* other, int first_contract_dims, int sec
 
 Tensor2D* Tensor2D::dot(TensorBase* other) {
     Tensor2D* output = this->contract(other, 1, 0);
-    output->setName("dot");
     return output;
 }
 
@@ -144,5 +143,5 @@ Tensor2D* Tensor2D::pow(Tensor0D* other) {
 }
 
 void Tensor2D::printInfo() {
-    cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
+    cout<< ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
 }

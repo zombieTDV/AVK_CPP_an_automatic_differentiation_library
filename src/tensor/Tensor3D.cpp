@@ -1,7 +1,7 @@
 #include "../../include/tensor/Tensor3D.h"
 
-Tensor3D::Tensor3D(Float3D values, string operation, string name, bool parameter) :
-    TensorBase(operation, name, parameter)
+Tensor3D::Tensor3D(Float3D values, string operation, bool parameter) :
+    TensorBase(operation, parameter)
 {
     this->batch = values.size();
     this->rows = values.begin()->size();
@@ -11,8 +11,8 @@ Tensor3D::Tensor3D(Float3D values, string operation, string name, bool parameter
     this->grad = Eigen::Tensor<float, 3>(this->batch, this->rows, this->cols).setZero();
 }
 
-Tensor3D::Tensor3D(Eigen::Tensor<float, 3> tensor, string operation, string name, bool parameter) :
-    TensorBase(operation, name, parameter),
+Tensor3D::Tensor3D(Eigen::Tensor<float, 3> tensor, string operation, bool parameter) :
+    TensorBase(operation, parameter),
     data(tensor), 
     grad(Eigen::Tensor<float, 3>(tensor).setZero())
 {
@@ -166,5 +166,5 @@ Tensor3D* Tensor3D::pow(Tensor0D* other) {
     return output;
 }
 void Tensor3D::printInfo() {
-    cout << this->name << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
+    cout << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
 }

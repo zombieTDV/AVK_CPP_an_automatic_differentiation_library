@@ -16,8 +16,8 @@ public:
     friend class OptimizationFunc;
     
     // Constructor declarations
-    Tensor0D(float data, string operation = "", string name = "", bool parameter = false);
-    Tensor0D(Eigen::Tensor<float, 0> tensor, string operation = "", string name = "", bool parameter = false);
+    Tensor0D(float data, string operation = "", bool parameter = false);
+    Tensor0D(Eigen::Tensor<float, 0> tensor, string operation = "", bool parameter = false);
 
 
     // Getters and setters

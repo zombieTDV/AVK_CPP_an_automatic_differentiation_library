@@ -1,14 +1,14 @@
 #include "../../include/tensor/Tensor0D.h"
 
-Tensor0D::Tensor0D(float data, string operation, string name, bool parameter) : 
-    TensorBase(operation, name, parameter), 
+Tensor0D::Tensor0D(float data, string operation, bool parameter) : 
+    TensorBase(operation, parameter), 
     data(Eigen::Tensor<float, 0>().setConstant(data))
 {
     this->grad.setZero();
 }
 
-Tensor0D::Tensor0D(Eigen::Tensor<float, 0> tensor, string operation, string name, bool parameter) : 
-    TensorBase(operation, name, parameter), 
+Tensor0D::Tensor0D(Eigen::Tensor<float, 0> tensor, string operation, bool parameter) : 
+    TensorBase(operation, parameter), 
     data(Eigen::Tensor<float, 0>(tensor))
 {
     this->grad.setZero();
@@ -113,5 +113,5 @@ Tensor0D* Tensor0D::operator*(Tensor0D* other) {
 }
 
 void Tensor0D::printInfo() {
-    cout << this->name << ": " << "Data: " << this->data << ", " << " Grad: " << this->grad << '\n';
+    cout << "Data: " << this->data << ", " << " Grad: " << this->grad << '\n';
 }

@@ -17,8 +17,8 @@ public:
     friend class OptimizationFunc;
 
     // Constructor declarations
-    Tensor2D(Float2D values, string operation = "", string name = "", bool parameter = false);
-    Tensor2D(Eigen::Tensor<float, 2> tensor, string operation = "", string name = "", bool parameter = false);
+    Tensor2D(Float2D values, string operation = "", bool parameter = false);
+    Tensor2D(Eigen::Tensor<float, 2> tensor, string operation = "", bool parameter = false);
 
     // Getters and setters
     Eigen::Tensor<float, 2> getData() const { return data; }
