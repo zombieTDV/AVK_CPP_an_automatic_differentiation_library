@@ -8,6 +8,8 @@ Tensor2D::Tensor2D(Float2D values, string operation, bool parameter) :
 
     this->data = Eigen::Tensor<float, 2>(this->rows, this->cols).setValues(values);
     this->grad = Eigen::Tensor<float, 2>(this->rows, this->cols).setZero();
+
+    updateMemoryUsage(this);
 }
 
 Tensor2D::Tensor2D(Eigen::Tensor<float, 2> tensor, string operation, bool parameter) :
@@ -17,6 +19,13 @@ Tensor2D::Tensor2D(Eigen::Tensor<float, 2> tensor, string operation, bool parame
 {
     this->rows = this->data.dimension(0);
     this->cols = this->data.dimension(1);
+
+    updateMemoryUsage(this);
+}
+
+Tensor2D::~Tensor2D(){
+    TensorBase::instanceCount--;
+    TensorBase::memoryUsage -= sizeof(*this);
 }
 
 void Tensor2D::backward() {

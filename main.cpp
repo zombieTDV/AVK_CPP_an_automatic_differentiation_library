@@ -144,6 +144,7 @@ int main(){
 
     TensorBase::printMemoryUsage();
     C3->deleteTopo();
+    
     TensorBase::printMemoryUsage();
     return 0;   
 }

@@ -19,7 +19,8 @@ public:
     Tensor0D(float data, string operation = "", bool parameter = false);
     Tensor0D(Eigen::Tensor<float, 0> tensor, string operation = "", bool parameter = false);
 
-
+    ~Tensor0D();
+    
     // Getters and setters
     Eigen::Tensor<float, 0> getData() const { return data; }
     Eigen::Tensor<float, 0> getGrad() const { return grad; }
@@ -40,6 +41,7 @@ public:
     
     Tensor0D* operator-() override;
     Tensor0D* operator*(Tensor0D* other) override;
+
     void printInfo() override;
 
     friend std::ostream& operator<<(std::ostream& out, const Tensor0D* T){

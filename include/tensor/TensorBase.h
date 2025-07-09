@@ -18,9 +18,6 @@ using Float3D = std::initializer_list<std::initializer_list<std::initializer_lis
 // using Pair1D = Eigen::array<Eigen::IndexPair<int>, 1>;
 
 class Tensor0D;  // Forward declaration
-class Tensor1D;
-class Tensor2D;
-class Tensor3D;
 class OptimizationFunc;
 
 class TensorBase{
@@ -39,12 +36,15 @@ protected:
 public:
     friend class OptimizationFunc; 
     
-    TensorBase(string operation = "", bool parameter = false) : operation(operation), parameter(parameter){
-        instanceCount++;
-        memoryUsage += sizeof(TensorBase);
-    }
+    TensorBase(string operation = "", bool parameter = false) : operation(operation), parameter(parameter){}
     
-    virtual ~TensorBase();
+    virtual ~TensorBase() {};
+
+    template <typename T>
+    void updateMemoryUsage(T* TensorClass){
+        TensorBase::instanceCount ++;
+        TensorBase::memoryUsage += sizeof(*TensorClass);
+    }
 
     static int getInstanceCount() {return instanceCount;}
     static void printMemoryUsage() {cout << "Memory Usage: " << memoryUsage << " bytes (" << (float)memoryUsage/(1024*1024) << " MB) for " << instanceCount << " instances" << "\n";}
@@ -72,7 +72,7 @@ public:
     void buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited);
     void deleteTopo();
     // void setName(string name);
-    void setCleaned(bool parameter);
+    void setParameter(bool parameter);
 
     void executeBackward() { backwardFn(); }
 

@@ -13,10 +13,10 @@ void TensorBase::buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visit
     }
 }
 
-TensorBase::~TensorBase(){
-    instanceCount--;
-    memoryUsage -= sizeof(TensorBase);
-}
+// TensorBase::~TensorBase(){
+//     TensorBase::instanceCount--;
+//     TensorBase::memoryUsage -= sizeof(*this);
+// }
 
 void TensorBase::deleteTopo(){
     for (TensorBase* pTensor : topo){
@@ -30,4 +30,4 @@ void TensorBase::deleteTopo(){
 
 // void TensorBase::setName(string name) {this->name = name;}
 
-void TensorBase::setCleaned(bool parameter) {this->parameter = parameter;}
+void TensorBase::setParameter(bool parameter) {this->parameter = parameter;}

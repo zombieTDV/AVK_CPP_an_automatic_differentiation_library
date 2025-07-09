@@ -2,15 +2,26 @@
 
 Tensor1D::Tensor1D(Float1D values, string operation, bool parameter) : 
     TensorBase(operation, parameter), 
-    data(Eigen::Tensor<float, 1>(values.size()).setValues(values)),
-    grad(Eigen::Tensor<float, 1>(values.size()).setZero())
-{}
+    data(Eigen::Tensor<float, 1>(values.size()).setValues(values))
+{
+    this->grad.setZero();
+
+    updateMemoryUsage(this);
+}
 
 Tensor1D::Tensor1D(Eigen::Tensor<float, 1> tensor, string operation, bool parameter) : 
     TensorBase(operation, parameter), 
-    data(tensor),
-    grad(Eigen::Tensor<float, 1>(tensor).setZero())
-{}
+    data(tensor)
+{
+    this->grad.setZero();
+    
+    updateMemoryUsage(this);
+}
+
+Tensor1D::~Tensor1D(){
+    TensorBase::instanceCount--;
+    TensorBase::memoryUsage -= sizeof(*this);
+}
 
 void Tensor1D::backward() {
     vector<TensorBase*> visited;
@@ -114,4 +125,5 @@ Tensor1D* Tensor1D::pow(Tensor0D* other) {
 void Tensor1D::printInfo() {
     cout << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
 }
+
  

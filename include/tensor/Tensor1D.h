@@ -19,6 +19,7 @@ public:
     Tensor1D(Float1D values, string operation = "", bool parameter = false);
     Tensor1D(Eigen::Tensor<float, 1> tensor, string operation = "", bool parameter = false);
 
+    ~Tensor1D();
     // Getters and setters
     Eigen::Tensor<float, 1> getData() const { return data; }
     Eigen::Tensor<float, 1> getGrad() const { return grad; }

@@ -20,6 +20,7 @@ public:
     Tensor3D(Float3D values, string operation = "", bool parameter = false);
     Tensor3D(Eigen::Tensor<float, 3> tensor, string operation = "", bool parameter = false);
 
+    ~Tensor3D();
 
     // Getters and setters
     Eigen::Tensor<float, 3> getData() const { return data; }

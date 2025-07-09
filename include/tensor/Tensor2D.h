@@ -20,6 +20,8 @@ public:
     Tensor2D(Float2D values, string operation = "", bool parameter = false);
     Tensor2D(Eigen::Tensor<float, 2> tensor, string operation = "", bool parameter = false);
 
+    ~Tensor2D();
+
     // Getters and setters
     Eigen::Tensor<float, 2> getData() const { return data; }
     Eigen::Tensor<float, 2> getGrad() const { return grad; }
