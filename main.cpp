@@ -135,9 +135,12 @@ int main(){
 
     C3->backward();
 
-    A3->printInfo();
-    B3->printInfo();
-    C3->printInfo();
+    // A3->printInfo();
+    // B3->printInfo();
+    // C3->printInfo();
+
+    cout << C3;
+    
 
     TensorBase::printMemoryUsage();
     C3->deleteTopo();

@@ -76,4 +76,8 @@ public:
 
     void executeBackward() { backwardFn(); }
 
+    friend std::ostream& operator<<(std::ostream& out, const TensorBase* T){
+        out << "Tensor Base: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n'; 
+        return out; 
+    }
 };

@@ -45,4 +45,11 @@ public:
     Tensor1D* pow(Tensor0D* other) override;
 
     void printInfo() override;
+
+    friend std::ostream& operator<<(std::ostream& out, const Tensor1D* T){
+        out << "Tensor 3D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
+        out << "\tData: \n" << T->getData() << '\n'; 
+        out << "\tGrad: \n" << T->getGrad() << '\n';
+        return out; 
+    }
 };

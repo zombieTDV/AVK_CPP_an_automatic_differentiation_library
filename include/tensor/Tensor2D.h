@@ -47,4 +47,11 @@ public:
     Tensor2D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims);
     Tensor2D* dot(TensorBase* other);
     void printInfo() override;
+
+    friend std::ostream& operator<<(std::ostream& out, const Tensor2D* T){
+        out << "Tensor 3D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
+        out << "\tData: \n" << T->getData() << '\n'; 
+        out << "\tGrad: \n" << T->getGrad() << '\n';
+        return out; 
+    }
 };
