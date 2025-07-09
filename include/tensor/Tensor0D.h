@@ -48,6 +48,6 @@ public:
         out << "Tensor 3D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
         out << "\tData: \n" << T->getData() << '\n'; 
         out << "\tGrad: \n" << T->getGrad() << '\n';
-        return out; 
+        return out;
     }
 };

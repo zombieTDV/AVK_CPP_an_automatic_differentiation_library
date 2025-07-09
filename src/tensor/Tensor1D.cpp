@@ -122,8 +122,20 @@ Tensor1D* Tensor1D::pow(Tensor0D* other) {
     return output;
 }
 
-void Tensor1D::printInfo() {
-    cout << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
+void Tensor1D::printTensor1D(const Eigen::Tensor<float, 1>& tensor) const {
+    cout << "[ ";
+    for (int i = 0; i < tensor.dimension(0); ++i) {
+        cout << tensor(i) << " ";
+    }
+    cout << "]\n";
 }
+
+void Tensor1D::printInfo() {
+    cout << ": \n" << "Data: \n";
+    printTensor1D(this->data);
+    cout << "Grad: \n";
+    printTensor1D(this->grad);
+}
+
 
  

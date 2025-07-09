@@ -50,10 +50,14 @@ public:
     Tensor2D* dot(TensorBase* other);
     void printInfo() override;
 
+    void printTensor2D(const Eigen::Tensor<float, 2>& tensor) const;
+
     friend std::ostream& operator<<(std::ostream& out, const Tensor2D* T){
-        out << "Tensor 3D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
-        out << "\tData: \n" << T->getData() << '\n'; 
-        out << "\tGrad: \n" << T->getGrad() << '\n';
-        return out; 
+        out << "Tensor 2D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
+        out << "\tData: \n";
+        T->printTensor2D(T->getData());
+        out << "\tGrad: \n";
+        T->printTensor2D(T->getGrad());
+        return out;
     }
 };

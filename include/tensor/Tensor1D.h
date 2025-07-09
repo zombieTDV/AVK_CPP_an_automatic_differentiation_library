@@ -47,10 +47,14 @@ public:
 
     void printInfo() override;
 
+    void printTensor1D(const Eigen::Tensor<float, 1>& tensor) const;
+
     friend std::ostream& operator<<(std::ostream& out, const Tensor1D* T){
-        out << "Tensor 3D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
-        out << "\tData: \n" << T->getData() << '\n'; 
-        out << "\tGrad: \n" << T->getGrad() << '\n';
-        return out; 
+        out << "Tensor 1D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
+        out << "\tData: ";
+        T->printTensor1D(T->getData());
+        out << "\tGrad: ";
+        T->printTensor1D(T->getGrad());
+        return out;
     }
 };

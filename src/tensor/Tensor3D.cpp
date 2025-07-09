@@ -174,6 +174,30 @@ Tensor3D* Tensor3D::pow(Tensor0D* other) {
     Tensor3D* output = this->pow(other->data(0));
     return output;
 }
+
+void Tensor3D::printTensor3D(const Eigen::Tensor<float, 3>& tensor) const {
+    // Print batch headers
+    for (int b = 0; b < tensor.dimension(0); ++b) {
+        cout << "Batch " << b << ":\t";
+    }
+    cout << "\n";
+    // Print rows side by side
+    for (int r = 0; r < tensor.dimension(1); ++r) {
+        for (int b = 0; b < tensor.dimension(0); ++b) {
+            for (int c = 0; c < tensor.dimension(2); ++c) {
+                cout << tensor(b, r, c) << " ";
+            }
+            cout << "\t\t";
+        }
+        cout << "\n";
+    }
+
+    cout << '\n';
+}
+
 void Tensor3D::printInfo() {
-    cout << ": \n" << "Data: \n" << this->data << '\n' << "Grad: \n" << this->grad << '\n';
+    cout << ": \n" << "Data: \n";
+    printTensor3D(this->data);
+    cout << "Grad: \n";
+    printTensor3D(this->grad);
 }

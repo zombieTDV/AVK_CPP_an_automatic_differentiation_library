@@ -47,6 +47,7 @@ public:
         }}  
     }
 };
+
 int main(){
     //-------------------------------------- Tensor0D testing ground
     // MeanSquaredErrorLoss Loss_func;
@@ -113,19 +114,19 @@ int main(){
 
     //-------------------------------------- Tensor3D testing ground
     Tensor3D* A3 = new Tensor3D({{
-        {1, 3}, 
-        {2, 4}
+        {1, 2}, 
+        {3, 4}
     }, {
-        {5, 7}, 
-        {6, 8}
-    }}, "");
+        {5, 6}, 
+        {7, 8}
+    }}, "", true);
     Tensor3D* B3 = new Tensor3D({{
-        {1, 3}, 
-        {2, 4}
+        {1, 2}, 
+        {3, 4}
     }, {
-        {5, 7}, 
-        {6, 8}
-    }}, "");
+        {5, 6}, 
+        {7, 8}
+    }}, "", true);
 
     // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
     //     Eigen::IndexPair<int>(1, 0)
@@ -139,9 +140,10 @@ int main(){
     // B3->printInfo();
     // C3->printInfo();
 
+    cout << A3;
+    cout << B3;
     cout << C3;
     
-
     TensorBase::printMemoryUsage();
     C3->deleteTopo();
     
