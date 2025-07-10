@@ -6,7 +6,7 @@ Tensor0D::Tensor0D(float data, string operation, bool parameter) :
 {
     this->grad.setZero();
 
-    updateMemoryUsage(this);
+    TensorBase::memoryUsage += sizeof(*this);
 }
 
 Tensor0D::Tensor0D(Eigen::Tensor<float, 0> tensor, string operation, bool parameter) : 
@@ -15,7 +15,7 @@ Tensor0D::Tensor0D(Eigen::Tensor<float, 0> tensor, string operation, bool parame
 {
     this->grad.setZero();
 
-    updateMemoryUsage(this);
+    TensorBase::memoryUsage += sizeof(*this);
 }
 
 Tensor0D::~Tensor0D(){

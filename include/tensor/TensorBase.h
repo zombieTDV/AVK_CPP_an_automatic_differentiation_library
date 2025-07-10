@@ -44,11 +44,6 @@ public:
         TensorBase::instanceCount --;
     }
 
-    template <typename T>
-    void updateMemoryUsage(T* TensorClass){
-        TensorBase::memoryUsage += sizeof(*TensorClass);
-    }
-
     static int getInstanceCount() {return instanceCount;}
     static void printMemoryUsage() {cout << "Memory Usage: " << memoryUsage << " bytes (" << (float)memoryUsage/(1024*1024) << " MB) for " << instanceCount << " instances" << "\n";}
 

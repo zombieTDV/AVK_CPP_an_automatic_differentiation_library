@@ -10,7 +10,7 @@ Tensor3D::Tensor3D(Float3D values, string operation, bool parameter) :
     this->data = Eigen::Tensor<float, 3>(this->batch, this->rows, this->cols).setValues(values);
     this->grad = Eigen::Tensor<float, 3>(this->batch, this->rows, this->cols).setZero();
 
-    updateMemoryUsage(this);
+    TensorBase::memoryUsage += sizeof(*this);
 }
 
 Tensor3D::Tensor3D(Eigen::Tensor<float, 3> tensor, string operation, bool parameter) :
@@ -22,7 +22,7 @@ Tensor3D::Tensor3D(Eigen::Tensor<float, 3> tensor, string operation, bool parame
     this->rows = this->data.dimension(1);
     this->cols = this->data.dimension(2);
 
-    updateMemoryUsage(this);
+    TensorBase::memoryUsage += sizeof(*this);
 }
 
 Tensor3D::~Tensor3D(){
