@@ -22,7 +22,7 @@ class OptimizationFunc;
 
 class TensorBase{
 protected:
-    string operation;
+    const string operation;
     // string name;
     bool parameter = false;
 
@@ -36,13 +36,16 @@ protected:
 public:
     friend class OptimizationFunc; 
     
-    TensorBase(string operation = "", bool parameter = false) : operation(operation), parameter(parameter){}
+    TensorBase(string operation = "", bool parameter = false) : operation(operation), parameter(parameter){
+        TensorBase::instanceCount ++;
+    }
     
-    virtual ~TensorBase() {};
+    virtual ~TensorBase() {
+        TensorBase::instanceCount --;
+    }
 
     template <typename T>
     void updateMemoryUsage(T* TensorClass){
-        TensorBase::instanceCount ++;
         TensorBase::memoryUsage += sizeof(*TensorClass);
     }
 

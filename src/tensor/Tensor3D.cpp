@@ -26,7 +26,6 @@ Tensor3D::Tensor3D(Eigen::Tensor<float, 3> tensor, string operation, bool parame
 }
 
 Tensor3D::~Tensor3D(){
-    TensorBase::instanceCount--;
     TensorBase::memoryUsage -= sizeof(*this);
 }
 

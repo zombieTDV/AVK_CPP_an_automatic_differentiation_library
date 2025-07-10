@@ -19,7 +19,6 @@ Tensor0D::Tensor0D(Eigen::Tensor<float, 0> tensor, string operation, bool parame
 }
 
 Tensor0D::~Tensor0D(){
-    TensorBase::instanceCount--;
     TensorBase::memoryUsage -= sizeof(*this);
 }
 

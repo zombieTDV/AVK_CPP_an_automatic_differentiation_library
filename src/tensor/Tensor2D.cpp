@@ -24,7 +24,6 @@ Tensor2D::Tensor2D(Eigen::Tensor<float, 2> tensor, string operation, bool parame
 }
 
 Tensor2D::~Tensor2D(){
-    TensorBase::instanceCount--;
     TensorBase::memoryUsage -= sizeof(*this);
 }
 
