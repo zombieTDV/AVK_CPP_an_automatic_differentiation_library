@@ -29,7 +29,7 @@ Tensor2D::~Tensor2D(){
 
 void Tensor2D::backward() {
     vector<TensorBase*> visited;
-    buildTopo(this->topo, visited);
+    buildTopo(visited);
 
     this->grad.setConstant(1);
 
