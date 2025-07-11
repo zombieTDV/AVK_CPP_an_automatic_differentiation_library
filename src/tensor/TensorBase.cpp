@@ -11,14 +11,9 @@ void TensorBase::buildTopo(vector<TensorBase*> &visited){
         for (TensorBase* child : children){
             child->buildTopo(visited);
         }
-        TensorBase::topo.push_back(this);
+        topo.push_back(this);
     }
 }
-
-// TensorBase::~TensorBase(){
-//     TensorBase::instanceCount--;
-//     TensorBase::memoryUsage -= sizeof(*this);
-// }
 
 void TensorBase::deleteTopo(){
     for (TensorBase* pTensor : topo){
@@ -28,6 +23,8 @@ void TensorBase::deleteTopo(){
             continue;
         }
     }
+
+    topo.clear();
 }
 
 // void TensorBase::setName(string name) {this->name = name;}

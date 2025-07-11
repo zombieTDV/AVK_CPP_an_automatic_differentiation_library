@@ -27,11 +27,11 @@ protected:
     bool parameter = false;
 
     vector<TensorBase*> children;
-    static vector<TensorBase*> topo;
     
-
+    
     std::function<void()> backwardFn = [](){};
-
+    
+    static vector<TensorBase*> topo;
     static int instanceCount;
     static int memoryUsage;
 public:
@@ -41,9 +41,7 @@ public:
         TensorBase::instanceCount ++;
     }
     
-    virtual ~TensorBase() {
-        TensorBase::instanceCount --;
-    }
+    virtual ~TensorBase() {TensorBase::instanceCount --;}
 
     static int getInstanceCount() {return instanceCount;}
     static void printMemoryUsage() {cout << "Memory Usage: " << memoryUsage << " bytes (" << (float)memoryUsage/(1024*1024) << " MB) for " << instanceCount << " instances" << "\n";}
@@ -68,6 +66,18 @@ public:
     
     virtual void backward() = 0;
     virtual void printInfo() = 0;
+    
+    static void reserveTopo(int r_size){
+        if(r_size < 0){
+            throw std::runtime_error("Reserve size for topo must not be negative");
+        }
+
+        else{
+            cout << "[[Reversed " << r_size << " memory slots for topo]]\n";
+            TensorBase::topo.reserve(r_size);
+        }
+    }
+    
     void buildTopo(vector<TensorBase*> &visited);
     void deleteTopo();
     // void setName(string name);

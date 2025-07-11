@@ -120,8 +120,9 @@ Tensor3D* Tensor3D::dot(Tensor3D* other) {
     }
 
     Tensor3D* output = new Tensor3D(Eigen::Tensor<float, 3>(this->batch, this->rows, other->cols).setZero());
+    Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {Eigen::IndexPair<int>(1, 0)};
+    
     for (int i = 0; i < this->data.dimension(0); ++i) {
-        Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {Eigen::IndexPair<int>(1, 0)};
         output->data.chip<0>(i) = this->data.chip<0>(i).contract(other->data.chip<0>(i), contract_dims);
     }
 

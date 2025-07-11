@@ -49,6 +49,7 @@ public:
 };
 
 int main(){
+    TensorBase::reserveTopo(10);
     //-------------------------------------- Tensor0D testing ground
     // MeanSquaredErrorLoss Loss_func;
     // OptimizationFunc Opti_func;
