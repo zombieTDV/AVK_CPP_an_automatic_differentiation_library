@@ -58,6 +58,8 @@ public:
         T->printTensor2D(T->getData());
         out << "\tGrad: \n";
         T->printTensor2D(T->getGrad());
+
+        cout << '\n';
         return out;
     }
 };

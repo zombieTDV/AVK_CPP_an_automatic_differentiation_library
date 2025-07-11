@@ -45,9 +45,9 @@ public:
     void printInfo() override;
 
     friend std::ostream& operator<<(std::ostream& out, const Tensor0D* T){
-        out << "Tensor 3D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
-        out << "\tData: \n" << T->getData() << '\n'; 
-        out << "\tGrad: \n" << T->getGrad() << '\n';
+        out << "Tensor 0D: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n';
+        out << "\tData: " << T->getData() << '\n'; 
+        out << "\tGrad: " << T->getGrad() << "\n\n";
         return out;
     }
 };

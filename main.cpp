@@ -38,8 +38,8 @@ public:
     // friend class Tensor3D;
     OptimizationFunc() {};
 
-    void gradientDescent(vector<TensorBase*> topo, float learning_rate){
-        for (auto it = topo.rbegin(); it != topo.rend(); ++it){
+    void gradientDescent(float learning_rate){
+        for (auto it = TensorBase::topo.rbegin(); it != TensorBase::topo.rend(); ++it){
             Tensor0D* new_it = dynamic_cast<Tensor0D*>(*it);
             if ((*new_it).parameter){
                 (*new_it).data += -learning_rate * (*new_it).grad;
@@ -53,51 +53,52 @@ int main(){
     //-------------------------------------- Tensor0D testing ground
     // MeanSquaredErrorLoss Loss_func;
     // OptimizationFunc Opti_func;
-    // Tensor0D* A0 = new Tensor0D(5, "", "A0", true);
-    // Tensor0D* B0 = new Tensor0D(3, "", "B0", true);
+    // Tensor0D* A0 = new Tensor0D(5, "", true);
+    // Tensor0D* B0 = new Tensor0D(3, "", true);
 
     // for (int i = 0; i < 10; i++){
-    //     Tensor0D* Y_hat = new Tensor0D(15, "", "Y-hat");
-    //     Tensor0D* C0 = Loss_func.Tensor0D_Loss((*A0 + B0), Y_hat);
+    //     Tensor0D* Y_hat = new Tensor0D(15, "");
+    //     Tensor0D* Y = (*A0 + B0);
+    //     Tensor0D* C0 = Loss_func.Tensor0D_Loss(Y, Y_hat);
 
     //     C0->backward();
 
-    //     // A0->printInfo();
-    //     // B0->printInfo();
-    //     // C0->printInfo();
+    //     cout << A0;
+    //     cout << B0;
+    //     cout << Y;
 
-    //     Opti_func.gradientDescent(C0->topo, 0.1);
+    //     Opti_func.gradientDescent(0.1);
 
-    //     A0->printInfo();
-    //     B0->printInfo();
-    //     C0->printInfo();
 
-    //     cout << "Loss: " << C0->data << '\n';
+    //     cout << "Loss: " << C0->getData() << '\n';
 
+    //     // TensorBase::printMemoryUsage();
     //     C0->deleteTopo();
 
     // }
+    // TensorBase::printMemoryUsage();
     
 
     //-------------------------------------- Tensor1D testing ground
-    // Tensor1D* A1 = new Tensor1D({3, 5}, "", "A1");
-    // Tensor1D* B1 = new Tensor1D({6, 9}, "", "B1");
+    // Tensor1D* A1 = new Tensor1D({3, 5});
+    // Tensor1D* B1 = new Tensor1D({6, 9});
 
     // Tensor1D* C1 = *A1 * B1;
 
     // C1->backward();
 
-    // A1->printInfo();
-    // B1->printInfo();
-    // C1->printInfo();
+    // cout << A1;
+    // cout << B1;
+    // cout << C1;
 
     // C1->deleteTopo();
+    // TensorBase::printMemoryUsage();
 
-    // //-------------------------------------- Tensor2D testing ground
+    //-------------------------------------- Tensor2D testing ground
     // Tensor2D* A2 = new Tensor2D({{1, 2}, 
-    //                             {3, 4}}, "", "A2");
+    //                             {3, 4}}, "");
     // Tensor2D* B2 = new Tensor2D({{5, 6, 7}, 
-    //                                 {8, 9, 10}}, "", "B2");
+    //                                 {8, 9, 10}}, "", true);
 
     // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
     //     Eigen::IndexPair<int>(1, 0)
@@ -107,11 +108,12 @@ int main(){
 
     // C2->backward();
 
-    // A2->printInfo();
-    // B2->printInfo();
-    // C2->printInfo();
+    // cout << A2;
+    // cout << B2;
+    // cout << C2;
 
-    // // C2->deleteTopo();
+    // C2->deleteTopo();
+    // TensorBase::printMemoryUsage();
 
     //-------------------------------------- Tensor3D testing ground
     Tensor3D* A3 = new Tensor3D({{
@@ -136,10 +138,6 @@ int main(){
     Tensor3D* C3 = A3->dot(B3);
 
     C3->backward();
-
-    // A3->printInfo();
-    // B3->printInfo();
-    // C3->printInfo();
 
     cout << A3;
     cout << B3;

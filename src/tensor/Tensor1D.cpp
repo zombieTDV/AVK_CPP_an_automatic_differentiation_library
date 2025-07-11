@@ -2,18 +2,20 @@
 
 Tensor1D::Tensor1D(Float1D values, string operation, bool parameter) : 
     TensorBase(operation, parameter), 
-    data(Eigen::Tensor<float, 1>(values.size()).setValues(values))
+    data(Eigen::Tensor<float, 1>(values.size()).setValues(values)),
+    grad(Eigen::Tensor<float, 1>(values.size()).setZero())
 {
-    this->grad.setZero();
+    // this->grad.setZero();
 
     TensorBase::memoryUsage += sizeof(*this);
 }
 
 Tensor1D::Tensor1D(Eigen::Tensor<float, 1> tensor, string operation, bool parameter) : 
     TensorBase(operation, parameter), 
-    data(tensor)
+    data(tensor),
+    grad(Eigen::Tensor<float, 1>(tensor).setZero())
 {
-    this->grad.setZero();
+    // this->grad.setZero();
     
     TensorBase::memoryUsage += sizeof(*this);
 }
