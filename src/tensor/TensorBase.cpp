@@ -3,13 +3,15 @@
 int TensorBase::instanceCount = 0;  
 int TensorBase::memoryUsage = 0;
 
-void TensorBase::buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited){
+vector<TensorBase*> TensorBase::topo;
+
+void TensorBase::buildTopo(vector<TensorBase*> &visited){
     if (std::find(visited.begin(), visited.end(), this) == visited.end()){
         visited.push_back(this);
         for (TensorBase* child : children){
-            child->buildTopo(topo, visited);
+            child->buildTopo(visited);
         }
-        topo.push_back(this);
+        TensorBase::topo.push_back(this);
     }
 }
 

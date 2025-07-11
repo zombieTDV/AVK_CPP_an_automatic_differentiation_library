@@ -31,7 +31,7 @@ Tensor3D::~Tensor3D(){
 
 void Tensor3D::backward() {
     vector<TensorBase*> visited;
-    buildTopo(this->topo, visited);
+    buildTopo(visited);
 
     this->grad.setConstant(1);
 

@@ -24,7 +24,7 @@ Tensor0D::~Tensor0D(){
 
 void Tensor0D::backward() {
     vector<TensorBase*> visited;
-    buildTopo(this->topo, visited);
+    buildTopo(visited);
 
     this->grad.setConstant(1);
 

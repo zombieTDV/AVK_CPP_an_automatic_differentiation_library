@@ -27,7 +27,8 @@ protected:
     bool parameter = false;
 
     vector<TensorBase*> children;
-    vector<TensorBase*> topo;
+    static vector<TensorBase*> topo;
+    
 
     std::function<void()> backwardFn = [](){};
 
@@ -67,7 +68,7 @@ public:
     
     virtual void backward() = 0;
     virtual void printInfo() = 0;
-    void buildTopo(vector<TensorBase*> &topo, vector<TensorBase*> &visited);
+    void buildTopo(vector<TensorBase*> &visited);
     void deleteTopo();
     // void setName(string name);
     void setParameter(bool parameter);
