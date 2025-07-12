@@ -1,8 +1,0 @@
-# ninja log v6
-14	5208	7740410193929700	CMakeFiles/program.dir/src/tensor/TensorBase.cpp.obj	ccd9c9839cdd3b6e
-5	5266	7740410193809676	CMakeFiles/program.dir/main.cpp.obj	46742496de4833bf
-24	6026	7740410194019697	CMakeFiles/program.dir/src/tensor/Tensor0D.cpp.obj	178174efb77791d3
-33	6365	7740410194129684	CMakeFiles/program.dir/src/tensor/Tensor1D.cpp.obj	9b59437fa2912340
-45	7687	7740410194219694	CMakeFiles/program.dir/src/tensor/Tensor2D.cpp.obj	bd489946517498c8
-54	9343	7740410194329702	CMakeFiles/program.dir/src/tensor/Tensor3D.cpp.obj	c73e3967880a7d40
-9346	9681	7740410287205513	program.exe	18065ecaeada1653
