@@ -12,7 +12,7 @@ Dự án đang trong trạng thái hoạt động nhưng chưa hoàn thiện. N�
 
 ## Tính năng hiện tại
 
-- Các phép toán tensor cơ bản (0D, 1D, 2D)
+- Các phép toán tensor cơ bản (0D, 1D, 2D, 3D)
 - Vi phân tự động
 - Các hàm tối ưu hóa cơ bản
 - Các hàm mất mát (loss functions)
@@ -34,7 +34,7 @@ Dự án đang trong trạng thái hoạt động nhưng chưa hoàn thiện. N�
 
 Đây là phiên bản C++ của dự án [CNN_and_Beta-VAE-](https://github.com/zombieTDV/CNN_and_Beta-VAE-), bao gồm:
 - Mạng nơ-ron tích chập (Convolutional Neural Networks)
-- Bộ tự mã hóa biến thể Beta (Beta-Variational Autoencoder)
+- Bộ tự mã hóa biến thiên Beta (Beta-Variational Autoencoder)
 - Thư viện học sâu tùy chỉnh (SUPER_AVK)
 
 ## Giấy phép
@@ -61,7 +61,7 @@ This project is in a working state but is not finished yet. It is being develope
 
 ## Current Features
 
-- Basic tensor operations (0D, 1D, 2D)
+- Basic tensor operations (0D, 1D, 2D, 3D)
 - Automatic differentiation
 - Basic optimization functions
 - Loss functions
