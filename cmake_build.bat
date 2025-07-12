@@ -125,5 +125,5 @@ goto menu
 :end
 echo.
 echo Thank you for using CMake Build System!
-timeout /t 2 >nul
+timeout /t 1 >nul
 exit 
