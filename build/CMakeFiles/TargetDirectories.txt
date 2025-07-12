@@ -1,3 +1,0 @@
-C:/Users/TDV/OneDrive - ut.edu.vn/Documents/C++/AVK_CPP/build/CMakeFiles/program.dir
-C:/Users/TDV/OneDrive - ut.edu.vn/Documents/C++/AVK_CPP/build/CMakeFiles/edit_cache.dir
-C:/Users/TDV/OneDrive - ut.edu.vn/Documents/C++/AVK_CPP/build/CMakeFiles/rebuild_cache.dir
