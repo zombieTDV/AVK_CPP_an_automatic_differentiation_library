@@ -1,6 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 title CMake Build System
+set BUILD_TYPE=Release
 
 :menu
 cls
@@ -12,16 +13,18 @@ echo 2. Build Project
 echo 3. Clean Build
 echo 4. Run Program
 echo 5. Show Build Status
-echo 6. Exit
+echo 6. Set Build Type (Current: !BUILD_TYPE!)
+echo 7. Exit
 echo ===========================================
-set /p choice="Enter your choice (1-6): "
+set /p choice="Enter your choice (1-7): "
 
 if "%choice%"=="1" goto configure
 if "%choice%"=="2" goto build
 if "%choice%"=="3" goto clean
 if "%choice%"=="4" goto run
 if "%choice%"=="5" goto status
-if "%choice%"=="6" goto end
+if "%choice%"=="6" goto setbuildtype
+if "%choice%"=="7" goto end
 
 echo Invalid choice! Please try again.
 timeout /t 2 >nul
@@ -36,7 +39,7 @@ if exist build (
 )
 mkdir build
 cd build
-cmake -G "Ninja" ..
+cmake -G "Ninja" -DCMAKE_BUILD_TYPE=!BUILD_TYPE! ..
 if %errorlevel% equ 0 (
     echo.
     echo Configuration successful!
@@ -120,6 +123,22 @@ if exist build (
 )
 echo ===========================================
 pause
+goto menu
+
+:setbuildtype
+echo.
+echo Select Build Type:
+echo 1. Release
+echo 2. Debug
+set /p buildchoice="Enter your choice (1-2): "
+if "%buildchoice%"=="1" (
+    set BUILD_TYPE=Release
+) else if "%buildchoice%"=="2" (
+    set BUILD_TYPE=Debug
+) else (
+    echo Invalid choice! Keeping current build type.
+)
+timeout /t 1 >nul
 goto menu
 
 :end

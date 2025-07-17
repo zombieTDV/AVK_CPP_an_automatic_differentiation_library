@@ -9,6 +9,7 @@ class OptimizationFunc;
 class Tensor2D : public TensorBase {
 private:
     Eigen::Tensor<float, 2> data, grad;
+    std::unique_ptr<Eigen::Tensor<float, 2>> velocity;
     int rows, cols;
 public:
     friend class Tensor0D;  // Friend declarations
@@ -45,10 +46,17 @@ public:
     Tensor2D* pow(double other) override;
     Tensor2D* pow(float other) override;
     Tensor2D* pow(Tensor0D* other) override;
+
+    Tensor0D* mean() override;
+    Tensor0D* sum() override;
     
     Tensor2D* contract(TensorBase* other, int first_contract_dims, int second_contract_dims);
     Tensor2D* dot(TensorBase* other);
     void printInfo() override;
+
+    
+
+    void applyGradientDescent(float learning_rate) override;
 
     void printTensor2D(const Eigen::Tensor<float, 2>& tensor) const;
 

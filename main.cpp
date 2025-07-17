@@ -18,38 +18,32 @@ using std::cout;
 
 class MeanSquaredErrorLoss{
 public:
-    // Friend declarations
-    // friend class Tensor0D;
-    // friend class Tensor1D;  
-    // friend class Tensor2D;
-    // friend class Tensor3D;
     Tensor0D* Tensor0D_Loss(Tensor0D* true_y, Tensor0D* predicted_y){
         Tensor0D* loss = (*true_y - predicted_y)->pow(2);
+        return loss;
+    }
+
+    Tensor3D* Tensor3D_Loss(Tensor3D* true_y, Tensor3D* predicted_y){
+        Tensor3D* loss = (*true_y - predicted_y)->pow(2);
         return loss;
     }
 };
 
 class OptimizationFunc{
+private:
 public:
-    // // Friend declarations
-    // friend class Tensor0D;
-    // friend class Tensor1D;  
-    // friend class Tensor2D;
-    // friend class Tensor3D;
     OptimizationFunc() {};
 
     void gradientDescent(float learning_rate){
         for (auto it = TensorBase::topo.rbegin(); it != TensorBase::topo.rend(); ++it){
-            Tensor0D* new_it = dynamic_cast<Tensor0D*>(*it);
-            if ((*new_it).parameter){
-                (*new_it).data += -learning_rate * (*new_it).grad;
-                (*new_it).grad.setZero();
-        }}  
-    }
+            (*it)->applyGradientDescent(learning_rate);
+    }}
 };
 
 int main(){
     TensorBase::reserveTopo(10);
+    MeanSquaredErrorLoss Loss_func;
+    OptimizationFunc Opti_func;
     //-------------------------------------- Tensor0D testing ground
     // MeanSquaredErrorLoss Loss_func;
     // OptimizationFunc Opti_func;
@@ -134,18 +128,35 @@ int main(){
     // Eigen::array<Eigen::IndexPair<int>, 1> contract_dims = {
     //     Eigen::IndexPair<int>(1, 0)
     // };
+    for (int i = 0; i < 1; i++){
+        Tensor3D* Y = new Tensor3D({{
+            {0, 0}, 
+            {0, 0}
+        }, {
+            {0, 0}, 
+            {0, 0}
+        }}, "");
 
-    Tensor3D* C3 = A3->dot(B3);
 
-    C3->backward();
+        Tensor3D* Y_hat = A3->dot(B3);
 
-    cout << A3;
-    cout << B3;
-    cout << C3;
+        Tensor3D* Loss = Loss_func.Tensor3D_Loss(Y, Y_hat);
+        Loss->backward();
+
+        
+        cout << A3;
+        cout << B3;
+        cout << Y_hat;
+        cout << Loss;
+        
+        // Opti_func.gradientDescent(0.1);
+        
+        TensorBase::printMemoryUsage();
+        Loss->deleteTopo();
+        TensorBase::printMemoryUsage();
+    }
+
     
-    TensorBase::printMemoryUsage();
-    C3->deleteTopo();
-    
-    TensorBase::printMemoryUsage();
+    // TensorBase::printMemoryUsage();
     return 0;   
 }

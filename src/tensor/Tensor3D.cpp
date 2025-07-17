@@ -134,7 +134,10 @@ Tensor3D* Tensor3D::dot(Tensor3D* other) {
             Eigen::array<Eigen::IndexPair<int>, 1> dims2 = {Eigen::IndexPair<int>(0, 0)};
             
             // dA = dC * B^T
-            this->grad.chip<0>(i) += output->grad.chip<0>(i).contract(other->data.chip<0>(i), dims1);
+            this->grad.chip<0>(i) += output->grad.chip<0>(i).contract(
+                other->data.chip<0>(i).shuffle(Eigen::array<int, 2>{1, 0}),
+                Eigen::array<Eigen::IndexPair<int>, 1>{Eigen::IndexPair<int>(1, 0)}
+            );
             // dB = A^T * dC
             other->grad.chip<0>(i) += this->data.chip<0>(i).contract(output->grad.chip<0>(i), dims2);
         }
@@ -173,6 +176,16 @@ Tensor3D* Tensor3D::pow(double other) {
 Tensor3D* Tensor3D::pow(Tensor0D* other) {
     Tensor3D* output = this->pow(other->data(0));
     return output;
+}
+
+
+
+
+void Tensor3D::applyGradientDescent(float learning_rate){
+    if (parameter){
+        data += -learning_rate * grad;
+        grad.setZero();
+    }
 }
 
 void Tensor3D::printTensor3D(const Eigen::Tensor<float, 3>& tensor) const {

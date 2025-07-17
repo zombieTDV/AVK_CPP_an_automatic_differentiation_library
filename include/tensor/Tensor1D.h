@@ -9,6 +9,7 @@ class OptimizationFunc;
 class Tensor1D : public TensorBase {
 private:
     Eigen::Tensor<float, 1> data, grad;
+    std::unique_ptr<Eigen::Tensor<float, 1>> velocity;
 public:
     friend class Tensor0D;  // Friend declarations
     friend class Tensor2D;
@@ -28,12 +29,15 @@ public:
 
     // Function declarations
     void backward() override;
-    Tensor1D* operator+(TensorBase* other);
+    Tensor1D* operator+(TensorBase* other) override;
+    Tensor1D* operator+(float other) override;
     Tensor1D* operator-();
     Tensor1D* operator*(TensorBase* other);
     Tensor1D* operator*(Tensor0D* other);
     Tensor1D* operator-(TensorBase* other);
-    // Tensor1D* operator/(TensorBase* other) override;
+    Tensor1D* operator-(float other);
+    Tensor1D* operator/(TensorBase* other) override;
+    Tensor1D* operator/(float other) override;
     // Tensor1D* operator^(TensorBase* other) override;
     // Tensor1D* operator^(float other) override;
     // Tensor1D* operator^(int other) override;
@@ -44,6 +48,12 @@ public:
     Tensor1D* pow(double other) override;
     Tensor1D* pow(float other) override;
     Tensor1D* pow(Tensor0D* other) override;
+
+    Tensor0D* mean() override;
+    Tensor0D* sum() override;
+
+
+    void applyGradientDescent(float learning_rate) override;
 
     void printInfo() override;
 
@@ -57,4 +67,5 @@ public:
         T->printTensor1D(T->getGrad());
         return out;
     }
+
 };

@@ -1,6 +1,7 @@
 #pragma once //Báo cho trình biên dịch không khai báo lớp này quá 1 lần.
 #include "../../unsupported/Eigen/CXX11/Tensor"
 #include <iostream>
+#include <array>
 // #include <functional>
 // #include <algorithm>
 
@@ -51,18 +52,26 @@ public:
     bool isParameter() const {return parameter;}
     vector<TensorBase*> getChildren() const {return children;}
     vector<TensorBase*> getTopo() const {return topo;}
+
     std::function<void()> getBackwardFn() const {return backwardFn;}
     
     virtual TensorBase* operator+(TensorBase* other) = 0;
+    virtual TensorBase* operator+(float other) = 0;
     virtual TensorBase* operator-(TensorBase* other) = 0;
     virtual TensorBase* operator-() = 0;
     virtual TensorBase* operator*(TensorBase* other) = 0;
     virtual TensorBase* operator*(Tensor0D* other) = 0;
 
+    virtual TensorBase* operator/(TensorBase* other) = 0;
+    virtual TensorBase* operator/(float other) = 0;
+
     virtual TensorBase* pow(int other) = 0;
     virtual TensorBase* pow(double other) = 0;
     virtual TensorBase* pow(float other) = 0;
     virtual TensorBase* pow(Tensor0D* other) = 0;
+
+    virtual Tensor0D* sum() = 0;
+    virtual Tensor0D* mean() = 0;
     
     virtual void backward() = 0;
     virtual void printInfo() = 0;
@@ -84,6 +93,9 @@ public:
     void setParameter(bool parameter);
 
     void executeBackward() { backwardFn(); }
+
+
+    virtual void applyGradientDescent(float learning_rate) = 0;
 
     friend std::ostream& operator<<(std::ostream& out, const TensorBase* T){
         out << "Tensor Base: \n\tOperation: " << T->getOperation() << "\t is parameter: " << T->isParameter() << '\n'; 

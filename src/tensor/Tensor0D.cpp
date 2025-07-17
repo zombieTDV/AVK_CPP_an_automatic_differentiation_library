@@ -120,6 +120,21 @@ Tensor0D* Tensor0D::operator*(Tensor0D* other) {
     return output;
 }
 
+Tensor0D* Tensor0D::operator/(float other) {
+    if (other == 0.0f) {
+        throw std::invalid_argument("Division by zero in Tensor0D::operator/(float)");
+    }
+    return new Tensor0D(this->data(0) / other, this->operation + "/", this->parameter);
+}
+
+
+void Tensor0D::applyGradientDescent(float learning_rate){
+    if (parameter){
+        data += -learning_rate * grad;
+        grad.setZero();
+    }
+}
+
 void Tensor0D::printInfo() {
     cout << "Data: " << this->data << ", " << " Grad: " << this->grad << '\n';
 }

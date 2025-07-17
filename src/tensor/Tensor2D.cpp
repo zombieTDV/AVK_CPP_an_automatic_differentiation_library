@@ -150,6 +150,14 @@ Tensor2D* Tensor2D::pow(Tensor0D* other) {
     return output;
 }
 
+
+void Tensor2D::applyGradientDescent(float learning_rate){
+    if (parameter){
+        data += -learning_rate * grad;
+        grad.setZero();
+    }
+}
+
 void Tensor2D::printTensor2D(const Eigen::Tensor<float, 2>& tensor) const {
     for (int r = 0; r < tensor.dimension(0); ++r) {
         for (int c = 0; c < tensor.dimension(1); ++c) {

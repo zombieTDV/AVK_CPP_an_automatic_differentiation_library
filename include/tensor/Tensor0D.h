@@ -9,6 +9,7 @@ class OptimizationFunc;
 class Tensor0D : public TensorBase {
 private:
     Eigen::Tensor<float, 0> data, grad;
+    std::unique_ptr<Eigen::Tensor<float, 0>> velocity;
 public:
     friend class Tensor1D;  // Friend declarations
     friend class Tensor2D;
@@ -39,8 +40,20 @@ public:
     Tensor0D* pow(Tensor0D* other) override;
     Tensor0D* pow(float other) override;
     
+    Tensor0D* mean() override {
+        throw std::logic_error("mean() is not defined for Tensor0D.");
+    }
+    
+    Tensor0D* sum() override {
+        throw std::logic_error("sum() is not defined for Tensor0D.");
+    }
+    
     Tensor0D* operator-() override;
     Tensor0D* operator*(Tensor0D* other) override;
+    Tensor0D* operator/(float other) override;
+
+
+    void applyGradientDescent(float learning_rate) override;
 
     void printInfo() override;
 

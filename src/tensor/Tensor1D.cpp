@@ -49,6 +49,18 @@ Tensor1D* Tensor1D::operator+(TensorBase* other) {
     return output;
 }
 
+Tensor1D* Tensor1D::operator+(float other) {
+    Tensor1D* output = new Tensor1D((this->data + other), "+");
+
+    output->children = {this};
+
+    output->backwardFn = [output, this] () {
+        this->grad += output->grad;
+    };
+
+    return output;
+}
+
 Tensor1D* Tensor1D::operator-() {
     Tensor0D* neg_one = new Tensor0D(-1.0f, "neg_one");
     Tensor1D* output = this->operator*(neg_one);
@@ -69,6 +81,20 @@ Tensor1D* Tensor1D::operator*(TensorBase* other) {
     return output;
 }
 
+Tensor1D* Tensor1D::operator-(TensorBase* other){
+    return (*this) + (other->operator-());
+}
+
+Tensor1D* Tensor1D::operator-(float other){
+    return (*this) + (-other);
+}
+
+Tensor1D* Tensor1D::operator/(TensorBase* other){
+    return (*this) * other->pow(-1);
+}
+Tensor1D* operator/(float other){
+    return (*this) * (1.0f / other);
+}
 Tensor1D* Tensor1D::operator*(Tensor0D* other) {
     // Create a 1D tensor with the same value as the scalar
     Eigen::Tensor<float, 1> scalar_tensor(this->data.dimensions());
@@ -121,6 +147,29 @@ Tensor1D* Tensor1D::pow(double other) {
 Tensor1D* Tensor1D::pow(Tensor0D* other) {
     Tensor1D* output = this->pow(other->data(0));
     return output;
+}
+
+Tensor0D* Tensor1D::sum(){
+    Tensor0D* output = new Tensor0D((this->data.sum()), "sum");
+    output->children = {this};
+    output->backwardFn = [output, this] () {
+        this->grad += this->data.constant(1.0) * output->grad;
+    };
+    return output;
+}
+
+Tensor0D* Tensor1D::mean(){
+    Tensor0D* output = this->sum() / this->data.size();
+    return output;
+}
+
+
+
+void Tensor1D::applyGradientDescent(float learning_rate){
+    if (parameter){
+        data += -learning_rate * grad;
+        grad.setZero();
+    }
 }
 
 void Tensor1D::printTensor1D(const Eigen::Tensor<float, 1>& tensor) const {

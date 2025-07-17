@@ -48,9 +48,14 @@ public:
     Tensor3D* pow(double other) override;
     Tensor3D* pow(Tensor0D* other) override;
 
+    Tensor0D* mean() override;
+    Tensor0D* sum() override;
+
     Tensor2D* contract(Tensor2D* other, int first_contract_dims, int second_contract_dims);
     Tensor3D* dot(Tensor3D* other);
-    void printInfo() override;
+    void printInfo() override;    
+
+    void applyGradientDescent(float learning_rate) override;
 
     void printTensor3D(const Eigen::Tensor<float, 3>& tensor) const;
 
